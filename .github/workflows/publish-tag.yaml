@@ -28,8 +28,8 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout (Cached LFS)
-      uses: nschloe/action-cached-lfs-checkout@v1
+    - name: Checkout
+      uses: actions/checkout@v4
     - name: Inject slug/short variables
       uses: rlespinasse/github-slug-action@v4
     - name: Login to DockerHub
