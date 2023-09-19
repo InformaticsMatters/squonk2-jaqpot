@@ -1,0 +1,22 @@
+.DS_Store
+.idea
+data-manager/jote
+venv
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# dotenv
+.env
+
+# dev files
+jaqpot_api_key.txt
+model_download_status.ods
+result.csv
+result.sdf
+src/model_loader.py
+
+# emacs temp files
+*~
+\#*#
+\#*

@@ -1,0 +1,5 @@
+im-data-manager-job-utilities == 1.*
+rdkit == 2023.3.3
+matplotlib == 3.7.2
+jaqpotpy == 1.0.104
+torch == 2.0.1
