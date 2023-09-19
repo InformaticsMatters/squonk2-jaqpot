@@ -1,0 +1,158 @@
+---
+kind: DataManagerJobDefinition
+kind-version: '2021.1'
+
+name: Predicions with Jaqpot models
+collection: im-template-jobs
+
+jobs:
+
+  jaqpot:
+    name: Prediction
+    description: >-
+      Predicts molecular properties using Jaqpot predictive models
+    version: '1.0.0'
+    category: predictive models
+    keywords:
+    - predictive models
+    - jaqpot
+    image:
+      name: informaticsmatters/squonk2-jaqpot
+      tag: '1.0.0-rc.1'
+      project-directory: /data
+      working-directory: /data
+    command: >-
+      /code/jaqpot.py
+      --model '{{ modelID }}'
+      --input '{{ inputFile }}'
+      --output '{{ outputFile }}'
+      {% if delimiter is defined %}--delimiter {{ delimiter }}{% endif %}
+      {% if idColumn is defined %}--id-column {{ idColumn }}{% endif %}
+      {% if readHeader is defined and readHeader %}--read-header{% endif %}
+      {% if writeHeader is defined and writeHeader %}--write-header{% endif %}
+    variables:
+      order:
+        options:
+        - modelID
+        - outputFile
+        - delimiter
+        - idColumn
+        - readHeader
+        - writeHeader
+      inputs:
+        type: object
+        required:
+        - inputFile
+        properties:
+          inputFile:
+            title: Molecules to predict (.sdf or .smi)
+            mime-types:
+            - squonk/x-smiles
+            - chemical/x-daylight-smiles
+            - chemical/x-mdl-sdfile
+            type: file
+      outputs:
+        type: object
+        properties:
+          outputFile:
+            title: Output file name (.sdf or .smi)
+            mime-types:
+            - chemical/x-mdl-sdfile
+            - chemical/x-daylight-smiles
+            - chemical/x-mdl-sdfile
+            creates: '{{ outputFile }}'
+            type: file
+      options:
+        type: object
+        required:
+        - modelID
+        - outputFile
+        - delimiter
+        - readHeader
+        - writeHeader
+        properties:
+          modelID:
+            title: Model ID
+            type: string
+            pattern: "^[A-Za-z0-9]$"
+          outputFile:
+            title: Output file name
+            type: string
+            pattern: "^[A-Za-z0-9_/\\.\\-]+$"
+          delimiter:
+            title: Delimiter for text formats
+            type: string
+            default: tab
+            enum:
+            - tab
+            - comma
+            - space
+            - pipe
+          idColumn:
+            title: ID field (name for .sdf, zero based index for .smi)
+            type: string
+          readHeader:
+            title: Read header line
+            type: boolean
+            default: true
+          writeHeader:
+            title: Write header line
+            type: boolean
+            default: true
+    tests:
+      smiles-execution:
+        inputs:
+          inputFile: data/10.smi
+        options:
+          modelID: fUAo2UQO8tTGZFhd5fPB
+          outputFile: predictions.sdf
+          readHeader: false
+          writeHeader: false
+        checks:
+          exitCode: 0
+          outputs:
+          - name: predictions.sdf
+            checks:
+            - exists: true
+      smiles-error-execution:
+        inputs:
+          inputFile: data/10-error.smi
+        options:
+          modelID: fUAo2UQO8tTGZFhd5fPB
+          outputFile: predictions.sdf
+          readHeader: false
+          writeHeader: false
+        checks:
+          exitCode: 0
+          outputs:
+          - name: predictions.sdf
+            checks:
+            - exists: true
+      sdf-execution:
+        inputs:
+          inputFile: data/candidates-10.sdf
+        options:
+          modelID: fUAo2UQO8tTGZFhd5fPB
+          outputFile: predictions.sdf
+          readHeader: false
+          writeHeader: false
+        checks:
+          exitCode: 0
+          outputs:
+          - name: predictions.sdf
+            checks:
+            - exists: true
+      sdf-error-execution:
+        inputs:
+          inputFile: data/candidates-10-error.sdf
+        options:
+          modelID: fUAo2UQO8tTGZFhd5fPB
+          outputFile: predictions.sdf
+          readHeader: false
+          writeHeader: false
+        checks:
+          exitCode: 0
+          outputs:
+          - name: predictions.sdf
+            checks:
+            - exists: true
