@@ -23,7 +23,7 @@ jobs:
       working-directory: /data
     command: >-
       /code/jaqpot.py
-      --model '{{ modelID }}'
+      --model '{{ model }}'
       --input '{{ inputFile }}'
       --output '{{ outputFile }}'
       {% if delimiter is defined %}--delimiter {{ delimiter }}{% endif %}
@@ -33,7 +33,7 @@ jobs:
     variables:
       order:
         options:
-        - modelID
+        - model
         - outputFile
         - delimiter
         - idColumn
@@ -65,16 +65,28 @@ jobs:
       options:
         type: object
         required:
-        - modelID
+        - model
         - outputFile
         - delimiter
         - readHeader
         - writeHeader
         properties:
-          modelID:
-            title: Model ID
+          model:
+            title: Model name
             type: string
-            pattern: "^[A-Za-z0-9]$"
+            enum:
+            - Aqueous solubility model
+            - CYP2C9 substrate model
+            - CYP2D6 inhibition model
+            - Lipophilicity model
+            - HIA model
+            - CYP2D6 substrate model
+            - Bioavailability model
+            - Clearance Microsome model
+            - VDss Lombardo model
+            - Clearance Hepatocyte model
+            - Half Life Obach model
+            - Blood Brain Barrier model
           outputFile:
             title: Output file name
             type: string
@@ -104,7 +116,7 @@ jobs:
         inputs:
           inputFile: data/10.smi
         options:
-          modelID: fUAo2UQO8tTGZFhd5fPB
+          model: Aqueous solubility model
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false
@@ -118,7 +130,7 @@ jobs:
         inputs:
           inputFile: data/10-error.smi
         options:
-          modelID: fUAo2UQO8tTGZFhd5fPB
+          model: Aqueous solubility model
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false
@@ -132,7 +144,7 @@ jobs:
         inputs:
           inputFile: data/candidates-10.sdf
         options:
-          modelID: fUAo2UQO8tTGZFhd5fPB
+          model: Aqueous solubility model
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false
@@ -146,7 +158,7 @@ jobs:
         inputs:
           inputFile: data/candidates-10-error.sdf
         options:
-          modelID: fUAo2UQO8tTGZFhd5fPB
+          model: Aqueous solubility model
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false
