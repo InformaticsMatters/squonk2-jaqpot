@@ -1,1 +1,0 @@
-# Jaqpot (torch) Models
