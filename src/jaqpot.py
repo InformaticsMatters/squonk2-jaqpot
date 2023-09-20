@@ -13,41 +13,40 @@ import rdkit_utils
 
 
 models = {
-    "Aqueous solubility model": "fUAo2UQO8tTGZFhd5fPB",
-    "hERG model": "AdIueWr1VDrWC3j90jjX",
-    "AMES model": "88NHffXLTX3aBM2vkmOf",
-    "CYP2C9 inhibition model": "7JnhJUBH1wxwB7Vgf8YI",
-    "CYP3A4 inhibition model": "4UfyxtoMWFuhN2PBrK42",
-    "CYP2C9 substrate model": "HI7FUfl5phSpxGSYjes1",
-    "CYP2D6 inhibition model": "dud9GNQZaBZ9grt7VMMA",
-    "Lipophilicity model": "tRgpmWmuBImTw3gC8NXE",
-    "PPBR model": "FR60WJT6qZoTE1L7tNzx",
-    "HIA model": "Z7OzhVDtxaTyMLscRJ4v",
-    "CYP2D6 substrate model": "cp4HGKxIxjAsdiM5T6Oj",
-    "Bioavailability model": "Em70hoXbIqcTvqscjDFu",
-    "Clearance Microsome model": "GfgMcorzIljrChpL824z",
-    "LD50 model": "gpA3uw3FM8TWbAZF2BWP",
-    "CYP3A4 Substrate CarbonMangels  model": "Mc8Uc3J1tvEnkkqlsiAE",
-    "CaCO2 Wang model": "2YSbIaKrHFTf1MnyswIk",
-    "DILI model": "nL7dOTzvaoGRmp1wiv8m",
-    "VDss Lombardo model": "MLQIb8KSFdLGSIQeUFaV",
-    "Clearance Hepatocyte model": "6oO0hMJyz4s0Sz62OLo6",
-    "Half Life Obach model": "y7ymAVUixvLs6tBmwdjZ",
-    "Blood Brain Barrier model": "oZZfU6RQgLnmHgk88hnc",
-    "PGP model": "llKNcGM5vuGhf6EGkOpA",
+    "fUAo2UQO8tTGZFhd5fPB": "Aqueous solubility model",
+    "AdIueWr1VDrWC3j90jjX": "hERG model",
+    "88NHffXLTX3aBM2vkmOf": "AMES model",
+    "7JnhJUBH1wxwB7Vgf8YI": "CYP2C9 inhibition model",
+    "4UfyxtoMWFuhN2PBrK42": "CYP3A4 inhibition model",
+    "HI7FUfl5phSpxGSYjes1": "CYP2C9 substrate model",
+    "dud9GNQZaBZ9grt7VMMA": "CYP2D6 inhibition model",
+    "tRgpmWmuBImTw3gC8NXE": "Lipophilicity model",
+    "FR60WJT6qZoTE1L7tNzx": "PPBR model",
+    "Z7OzhVDtxaTyMLscRJ4v": "HIA model",
+    "cp4HGKxIxjAsdiM5T6Oj": "CYP2D6 substrate model",
+    "Em70hoXbIqcTvqscjDFu": "Bioavailability model",
+    "GfgMcorzIljrChpL824z": "Clearance Microsome model",
+    "gpA3uw3FM8TWbAZF2BWP": "LD50 model",
+    "Mc8Uc3J1tvEnkkqlsiAE": "CYP3A4 Substrate CarbonMangels  model",
+    "2YSbIaKrHFTf1MnyswIk": "CaCO2 Wang model",
+    "nL7dOTzvaoGRmp1wiv8m": "DILI model",
+    "MLQIb8KSFdLGSIQeUFaV": "VDss Lombardo model",
+    "6oO0hMJyz4s0Sz62OLo6": "Clearance Hepatocyte model",
+    "y7ymAVUixvLs6tBmwdjZ": "Half Life Obach model",
+    "oZZfU6RQgLnmHgk88hnc": "Blood Brain Barrier model",
+    "llKNcGM5vuGhf6EGkOpA": "PGP model",
 }
 
 
 model_file = "{}.jmodel"
-meta_file = "{}_meta.json"
 
 # testing locally vs. running in container
-model_path = Path(".").joinpath("models").absolute()
-# model_path = Path(__file__).parent.joinpath("models").absolute()
+# model_path = Path(".").joinpath("models").absolute()
+model_path = Path(__file__).parent.joinpath("models").absolute()
 
 
 def run(
-    model_title: str,
+    model_id: str,
     input_filename: str,
     output_filename: str,
     delimiter: str = "\t",
@@ -55,7 +54,6 @@ def run(
     id_column=None,
     sdf_read_records: int = 100,
 ):
-    model_id = models[model_title]
     try:
         model = MolecularModel().load(
             str(model_path.joinpath(model_file.format(model_id)))
@@ -64,14 +62,7 @@ def run(
         DmLog.emit_event(f"Model {model_id} not found!")
         return
 
-    # try:
-    #     with open(model_path.joinpath(meta_file.format(model_id)), "r") as read_file:
-    #         meta = json.load(read_file)
-    #     model_title = meta["meta"]["titles"][0]
-    # except (KeyError, FileNotFoundError):
-    #     # model metadata file doesn't exist
-    #     model_title = "N/A"
-
+    model_title = models[model_id]
     model_name = model_title.replace(" ", "_").replace("__", "_")
 
     reader = rdkit_utils.create_reader(

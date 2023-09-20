@@ -23,7 +23,7 @@ jobs:
       working-directory: /data
     command: >-
       /code/jaqpot.py
-      --model '{{ model }}'
+      --model '{{ modelID }}'
       --input '{{ inputFile }}'
       --output '{{ outputFile }}'
       {% if delimiter is defined %}--delimiter {{ delimiter }}{% endif %}
@@ -33,7 +33,7 @@ jobs:
     variables:
       order:
         options:
-        - model
+        - modelID
         - outputFile
         - delimiter
         - idColumn
@@ -65,28 +65,28 @@ jobs:
       options:
         type: object
         required:
-        - model
+        - modelID
         - outputFile
         - delimiter
         - readHeader
         - writeHeader
         properties:
           model:
-            title: Model name
+            title: Model ID
             type: string
             enum:
-            - Aqueous solubility model
-            - CYP2C9 substrate model
-            - CYP2D6 inhibition model
-            - Lipophilicity model
-            - HIA model
-            - CYP2D6 substrate model
-            - Bioavailability model
-            - Clearance Microsome model
-            - VDss Lombardo model
-            - Clearance Hepatocyte model
-            - Half Life Obach model
-            - Blood Brain Barrier model
+            - fUAo2UQO8tTGZFhd5fPB
+            - HI7FUfl5phSpxGSYjes1
+            - dud9GNQZaBZ9grt7VMMA
+            - tRgpmWmuBImTw3gC8NXE
+            - Z7OzhVDtxaTyMLscRJ4v
+            - cp4HGKxIxjAsdiM5T6Oj
+            - Em70hoXbIqcTvqscjDFu
+            - GfgMcorzIljrChpL824z
+            - MLQIb8KSFdLGSIQeUFaV
+            - 6oO0hMJyz4s0Sz62OLo6
+            - y7ymAVUixvLs6tBmwdjZ
+            - oZZfU6RQgLnmHgk88hnc
           outputFile:
             title: Output file name
             type: string
@@ -114,9 +114,9 @@ jobs:
     tests:
       smiles-execution:
         inputs:
-          inputFile: data/10.smi
+          modelID: data/10.smi
         options:
-          model: Aqueous solubility model
+          model: fUAo2UQO8tTGZFhd5fPB
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false
@@ -130,7 +130,7 @@ jobs:
         inputs:
           inputFile: data/10-error.smi
         options:
-          model: Aqueous solubility model
+          modelID: fUAo2UQO8tTGZFhd5fPB
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false
@@ -144,7 +144,7 @@ jobs:
         inputs:
           inputFile: data/candidates-10.sdf
         options:
-          model: Aqueous solubility model
+          modelID: fUAo2UQO8tTGZFhd5fPB
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false
@@ -158,7 +158,7 @@ jobs:
         inputs:
           inputFile: data/candidates-10-error.sdf
         options:
-          model: Aqueous solubility model
+          modelID: fUAo2UQO8tTGZFhd5fPB
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false
