@@ -16,6 +16,19 @@ jobs:
     keywords:
     - predictive models
     - jaqpot
+    - aqueous solubility
+    - cyp2c9 substrate
+    - cyp2d6 inhibition
+    - lipophilicity
+    - hia
+    - cyp2d6 substrate
+    - bioavailability
+    - clearance microsome
+    - vdss lombardo
+    - clearance hepatocyte
+    - half life obach
+    - blood brain barrier
+    - bbb    
     image:
       name: informaticsmatters/squonk2-jaqpot
       tag: '1.0.0-rc.1'

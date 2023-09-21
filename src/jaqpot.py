@@ -4,7 +4,6 @@ import argparse
 import os
 
 from pathlib import Path
-import json
 
 from jaqpotpy.models import MolecularModel
 from dm_job_utilities.dm_log import DmLog
