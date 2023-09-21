@@ -31,7 +31,7 @@ jobs:
     - bbb
     image:
       name: informaticsmatters/squonk2-jaqpot
-      tag: '1.0.0-rc.1'
+      tag: '1.0.0'
       project-directory: /data
       working-directory: /data
     command: >-
