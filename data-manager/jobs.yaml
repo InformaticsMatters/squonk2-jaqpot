@@ -3,7 +3,7 @@ kind: DataManagerJobDefinition
 kind-version: '2021.1'
 
 name: Predicions with Jaqpot models
-collection: im-template-jobs
+collection: im-jaqpot
 
 jobs:
 
