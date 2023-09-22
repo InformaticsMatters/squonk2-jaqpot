@@ -87,19 +87,31 @@ jobs:
           model:
             title: Model ID
             type: string
-            enum:
-            - fUAo2UQO8tTGZFhd5fPB
-            - HI7FUfl5phSpxGSYjes1
-            - dud9GNQZaBZ9grt7VMMA
-            - tRgpmWmuBImTw3gC8NXE
-            - Z7OzhVDtxaTyMLscRJ4v
-            - cp4HGKxIxjAsdiM5T6Oj
-            - Em70hoXbIqcTvqscjDFu
-            - GfgMcorzIljrChpL824z
-            - MLQIb8KSFdLGSIQeUFaV
-            - 6oO0hMJyz4s0Sz62OLo6
-            - y7ymAVUixvLs6tBmwdjZ
-            - oZZfU6RQgLnmHgk88hnc
+            oneOf:
+            - title: Aqueous solubility model
+              const: fUAo2UQO8tTGZFhd5fPB
+            - title: CYP2C9 substrate model
+              const: HI7FUfl5phSpxGSYjes1
+            - title: CYP2D6 inhibition model
+              const: dud9GNQZaBZ9grt7VMMA
+            - title: Lipophilicity model
+              const: tRgpmWmuBImTw3gC8NXE
+            - title: HIA model
+              const: Z7OzhVDtxaTyMLscRJ4v
+            - title: CYP2D6 substrate model
+              const: cp4HGKxIxjAsdiM5T6Oj
+            - title: Bioavailability model
+              const: Em70hoXbIqcTvqscjDFu
+            - title: Clearance Microsome model
+              const: GfgMcorzIljrChpL824z
+            - title: VDss Lombardo model
+              const: MLQIb8KSFdLGSIQeUFaV
+            - title: Clearance Hepatocyte model
+              const: 6oO0hMJyz4s0Sz62OLo6
+            - title: Half Life Obach model
+              const: y7ymAVUixvLs6tBmwdjZ
+            - title: Blood Brain Barrier model
+              const: oZZfU6RQgLnmHgk88hnc
           outputFile:
             title: Output file name
             type: string
