@@ -84,7 +84,7 @@ jobs:
         - readHeader
         - writeHeader
         properties:
-          model:
+          modelID:
             title: Model ID
             type: string
             oneOf:
