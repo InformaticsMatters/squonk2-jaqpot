@@ -106,14 +106,7 @@ def run(
                 delimiter=delimiter,
             )
             model_type = "classification" if model.probability else "regression"
-            DmLog.emit_event(
-                "Model title:",
-                model_title,
-                ", property name",
-                model_name,
-                ", type:",
-                model_type,
-            )
+            DmLog.emit_event(f'Running "{model_title}" ({model_type})')
             writer.write(smi, mol, mol_id, props, values)
 
     os.chmod(output_filename, 0o664)
