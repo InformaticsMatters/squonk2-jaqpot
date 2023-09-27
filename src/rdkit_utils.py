@@ -19,24 +19,27 @@ import utils
 
 class SdfWriter:
 
-    def __init__(self, outfile, prop_names):
+    def __init__(self, outfile):
         if outfile.endswith('.gz'):
             self.gzip = gzip.open(outfile, 'wt')
             self.writer = Chem.SDWriter(self.gzip)
         else:
             self.gzip = None
             self.writer = Chem.SDWriter(outfile)
-        self.prop_names = prop_names
 
-    def write(self, smi, mol, id, existing_props, new_props, smiles_prop_name=None):
+    def write(self, smiles=None, mol=None, mol_id=None, existing_props=None, prop_names=None, new_props=None, smiles_prop_name=None):
         if not mol:
-            mol = Chem.MolFromSmiles(smi)
-        if id is not None:
+            mol = Chem.MolFromSmiles(smiles)
+        if mol_id is not None:
             mol.SetProp('_Name', id)
         if smiles_prop_name is not None:
-            mol.SetProp(smiles_prop_name, smi)
-
-        for i, prop_name in enumerate(self.prop_names):
+            mol.SetProp(smiles_prop_name, smiles)
+        if not prop_names:
+            prop_names = []
+        if not new_props:
+            new_props = []
+            
+        for i, prop_name in enumerate(prop_names):
             value = new_props[i]
             if prop_name is not None:
                 mol.SetProp(prop_name, str(value))
@@ -54,20 +57,26 @@ class SdfWriter:
 
 class SmilesWriter:
 
-    def __init__(self, outfile, sep, extra_field_names):
+    def __init__(self, outfile, sep):
         self.writer = open(outfile, 'w')
         if sep is None:
             self.sep = ' '
         else:
             self.sep = sep
-        self.extra_field_names = extra_field_names
 
     def write_header(self, values):
         line = self.sep.join(values)
         self.writer.write(line + "\n")
 
-    def write(self, smi, mol, id, existing_props, new_props, smiles_prop_name=None):
-        values = [smi]
+    def write(self, smiles=None, mol=None, mol_id=None, existing_props=None, prop_names=None, new_props=None, smiles_prop_name=None):
+        values = [smiles]
+        if not existing_props:
+            existing_props = []
+        if not prop_names:
+            prop_names = []
+        if not new_props:
+            new_props = []
+            
         for prop in existing_props:
             if prop is not None:
                 values.append(prop)
@@ -261,11 +270,11 @@ def create_reader(input_file, type=None, id_column=None, sdf_read_records=100, r
         raise ValueError('Unexpected file type', type)
 
 
-def create_writer(outfile, delimiter='\t', extra_field_names=[], calc_prop_names=[]):
+def create_writer(outfile, delimiter='\t'):
     if outfile.endswith('.sdf') or outfile.endswith('sd'):
-        return SdfWriter(outfile, calc_prop_names)
+        return SdfWriter(outfile)
     else:
-        return SmilesWriter(outfile, delimiter, extra_field_names)
+        return SmilesWriter(outfile, delimiter)
 
 
 def updateChargeFlagInAtomBlock(mb):

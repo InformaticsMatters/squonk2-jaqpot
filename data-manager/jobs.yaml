@@ -36,7 +36,7 @@ jobs:
       working-directory: /data
     command: >-
       /code/jaqpot.py
-      --model '{{ modelID }}'
+      '{{ modelID }}'
       --input '{{ inputFile }}'
       --output '{{ outputFile }}'
       {% if delimiter is defined %}--delimiter {{ delimiter }}{% endif %}
@@ -86,7 +86,7 @@ jobs:
         properties:
           modelID:
             title: Model ID
-            type: string
+            type: list
             oneOf:
             - title: Aqueous solubility model
               const: fUAo2UQO8tTGZFhd5fPB
@@ -141,7 +141,7 @@ jobs:
         inputs:
           inputFile: data/10.smi
         options:
-          modelID: fUAo2UQO8tTGZFhd5fPB
+          modelID: 6oO0hMJyz4s0Sz62OLo6 cp4HGKxIxjAsdiM5T6Oj dud9GNQZaBZ9grt7VMMA Em70hoXbIqcTvqscjDFu fUAo2UQO8tTGZFhd5fPB GfgMcorzIljrChpL824z HI7FUfl5phSpxGSYjes1 MLQIb8KSFdLGSIQeUFaV oZZfU6RQgLnmHgk88hnc tRgpmWmuBImTw3gC8NXE y7ymAVUixvLs6tBmwdjZ Z7OzhVDtxaTyMLscRJ4v
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false
