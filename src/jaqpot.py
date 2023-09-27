@@ -11,7 +11,7 @@ from dm_job_utilities.dm_log import DmLog
 import rdkit_utils
 
 
-models = {
+models_meta = {
     "fUAo2UQO8tTGZFhd5fPB": "Aqueous solubility model",
     "AdIueWr1VDrWC3j90jjX": "hERG model",
     "88NHffXLTX3aBM2vkmOf": "AMES model",
@@ -45,24 +45,29 @@ model_path = Path(__file__).parent.joinpath("models").absolute()
 
 
 def run(
-    model_id: str,
+    model_ids: list,
     input_filename: str,
     output_filename: str,
     delimiter: str = "\t",
     read_header: bool = True,
+    write_header: bool = True,
     id_column=None,
     sdf_read_records: int = 100,
+    reporting_interval: int = 100,
 ):
-    try:
-        model = MolecularModel().load(
-            str(model_path.joinpath(model_file.format(model_id)))
-        )
-    except FileNotFoundError:
-        DmLog.emit_event(f"Model {model_id} not found!")
-        return
 
-    model_title = models[model_id]
-    model_name = model_title.replace(" ", "_").replace("__", "_")
+    # TODO: when there's more models, reading them in advance may put
+    # too much pressure on memory. it's not too bad now, but may need
+    # to be evaluated later
+    models = {}
+    for model_id in set(model_ids):
+        try:
+            models[model_id] = MolecularModel().load(
+                str(model_path.joinpath(model_file.format(model_id)))
+            )
+        except FileNotFoundError:
+            DmLog.emit_event(f"Model {model_id} not found!")
+            continue
 
     reader = rdkit_utils.create_reader(
         input_filename,
@@ -73,6 +78,12 @@ def run(
     )
 
     extra_field_names = reader.get_extra_field_names()
+    
+    writer = rdkit_utils.create_writer(
+        output_filename,
+        delimiter=delimiter,
+    )
+
 
     num_outputs = 0
     count = -1
@@ -87,28 +98,37 @@ def run(
             # end of file
             break
 
-        # actual prediction
-        model(mol)
-        values = get_calc_values(model)
-
         num_outputs += 1
+        if (count + 1) % reporting_interval == 0:
+            DmLog.emit_event(f'{count + 1} molecules processed')
 
-        try:
-            writer.write(smi, mol, mol_id, props, values)
-        except NameError:
-            # writer not defined yet, do so now when I have the first
-            # results
-            calc_prop_names = get_calc_prop_names(model, model_name)
-            writer = rdkit_utils.create_writer(
-                output_filename,
-                extra_field_names=extra_field_names,
-                calc_prop_names=calc_prop_names,
-                delimiter=delimiter,
-            )
-            model_type = "classification" if model.probability else "regression"
-            DmLog.emit_event(f'Running "{model_title}" ({model_type})')
-            writer.write(smi, mol, mol_id, props, values)
+        values = []
+        calc_prop_names = []
+        for model_id, model in models.items():
+            # actual prediction
+            model(mol)
+            values.extend(get_calc_values(model))
+            calc_prop_names.extend(get_calc_prop_names(model, format_name(models_meta[model_id])))
 
+            # impractical to have them here
+            # model_type = "classification" if model.probability else "regression"
+            # DmLog.emit_event(f'Running "{models_meta[model_id]}" ({model_type})')
+
+        if count == 1 and write_header:
+            headers = rdkit_utils.generate_header_values(extra_field_names, len(props), calc_prop_names)
+            writer.write_header(headers)
+    
+        writer.write(
+            smiles=smi,
+            mol=mol,
+            mol_id=mol_id,
+            existing_props=props,  # only used in SmilesWriter
+            prop_names=calc_prop_names,  # only used in SdfWriter
+            new_props=values,
+        )
+
+    reader.close()
+    writer.close()
     os.chmod(output_filename, 0o664)
 
     DmLog.emit_event(num_outputs, "outputs among", count, "molecules")
@@ -163,13 +183,17 @@ def get_calc_values(molmod):
 
     return values
 
+def format_name(name):
+    """Return sd-file friendly name"""
+    return name.replace(" ", "_").replace("__", "_")
+
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Calqulate aqueous solubility")
-    parser.add_argument("-m", "--model", required=True, help="Jaqpot model name")
+    parser = argparse.ArgumentParser(description="Predict properties with a Jaqpot model")
+    parser.add_argument("models", metavar="Model ID", nargs="+", help="List of Jaqpot model IDs")
     parser.add_argument("-i", "--input", required=True, help="Input")
-    parser.add_argument("-o", "--output", required=True, help="The output file")
-    parser.add_argument("-d", "--delimiter", help="Delimiter when using SMILES")
+    parser.add_argument("-o", "--output", default="result.sdf", help="The output file")
+    parser.add_argument("-d", "--delimiter", default="\t", help="Delimiter when using SMILES")
     parser.add_argument(
         "--id-column",
         help="Column for name field (zero based integer for .smi, text for SDF)",
@@ -190,15 +214,22 @@ if __name__ == "__main__":
         type=int,
         help="Read this many SDF records to determine field names",
     )
+    parser.add_argument(
+        "--reporting-interval",
+        default=100,
+        type=int,
+        help="Log progress messages after N records",
+    )    
 
     args = parser.parse_args()
 
     run(
-        args.model,
+        args.models,
         args.input,
         args.output,
         delimiter=args.delimiter,
         read_header=args.read_header,
         id_column=args.id_column,
         sdf_read_records=args.sdf_read_records,
+        reporting_interval=args.reporting_interval,
     )
