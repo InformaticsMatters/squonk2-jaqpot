@@ -31,12 +31,12 @@ jobs:
     - bbb
     image:
       name: informaticsmatters/squonk2-jaqpot
-      tag: '1.0.3'
+      tag: '1.0.4'
       project-directory: /data
       working-directory: /data
     command: >-
       /code/jaqpot.py
-      '{{ modelID }}'
+      {% for id in  modelID %}{{ id }} {% endfor %}
       --input '{{ inputFile }}'
       --output '{{ outputFile }}'
       {% if delimiter is defined %}--delimiter {{ delimiter }}{% endif %}
@@ -86,32 +86,56 @@ jobs:
         properties:
           modelID:
             title: Model ID
-            type: list
-            oneOf:
-            - title: Aqueous solubility model
-              const: fUAo2UQO8tTGZFhd5fPB
-            - title: CYP2C9 substrate model
-              const: HI7FUfl5phSpxGSYjes1
-            - title: CYP2D6 inhibition model
-              const: dud9GNQZaBZ9grt7VMMA
-            - title: Lipophilicity model
-              const: tRgpmWmuBImTw3gC8NXE
-            - title: HIA model
-              const: Z7OzhVDtxaTyMLscRJ4v
-            - title: CYP2D6 substrate model
-              const: cp4HGKxIxjAsdiM5T6Oj
-            - title: Bioavailability model
-              const: Em70hoXbIqcTvqscjDFu
-            - title: Clearance Microsome model
-              const: GfgMcorzIljrChpL824z
-            - title: VDss Lombardo model
-              const: MLQIb8KSFdLGSIQeUFaV
-            - title: Clearance Hepatocyte model
-              const: 6oO0hMJyz4s0Sz62OLo6
-            - title: Half Life Obach model
-              const: y7ymAVUixvLs6tBmwdjZ
-            - title: Blood Brain Barrier model
-              const: oZZfU6RQgLnmHgk88hnc
+            type: array
+            anyOf:
+            - type: string
+              enum:
+                fUAo2UQO8tTGZFhd5fPB
+              title: Aqueous solubility model
+            - type: string
+              enum:
+                HI7FUfl5phSpxGSYjes1
+              title: CYP2C9 substrate model
+            - type: string
+              enum:
+                dud9GNQZaBZ9grt7VMMA
+              title: CYP2D6 inhibition model
+            - type: string
+              enum:
+                tRgpmWmuBImTw3gC8NXE
+              title: Lipophilicity model
+            - type: string
+              enum:
+                Z7OzhVDtxaTyMLscRJ4v
+              title: HIA model
+            - type: string
+              enum:
+                cp4HGKxIxjAsdiM5T6Oj
+              title: CYP2D6 substrate model
+            - type: string
+              enum:
+                Em70hoXbIqcTvqscjDFu
+              title: Bioavailability model
+            - type: string
+              enum:
+                GfgMcorzIljrChpL824z
+              title: Clearance Microsome model
+            - type: string
+              enum:
+                MLQIb8KSFdLGSIQeUFaV
+              title: VDss Lombardo model
+            - type: string
+              enum:
+                6oO0hMJyz4s0Sz62OLo6
+              title: Clearance Hepatocyte model
+            - type: string
+              enum:
+                y7ymAVUixvLs6tBmwdjZ
+              title: Half Life Obach model
+            - type: string
+              enum:
+                oZZfU6RQgLnmHgk88hnc
+              title: Blood Brain Barrier model
           outputFile:
             title: Output file name
             type: string
@@ -141,7 +165,15 @@ jobs:
         inputs:
           inputFile: data/10.smi
         options:
-          modelID: 6oO0hMJyz4s0Sz62OLo6 cp4HGKxIxjAsdiM5T6Oj dud9GNQZaBZ9grt7VMMA Em70hoXbIqcTvqscjDFu fUAo2UQO8tTGZFhd5fPB GfgMcorzIljrChpL824z HI7FUfl5phSpxGSYjes1 MLQIb8KSFdLGSIQeUFaV oZZfU6RQgLnmHgk88hnc tRgpmWmuBImTw3gC8NXE y7ymAVUixvLs6tBmwdjZ Z7OzhVDtxaTyMLscRJ4v
+          modelID:
+          - 6oO0hMJyz4s0Sz62OLo6
+          - cp4HGKxIxjAsdiM5T6Oj
+          - dud9GNQZaBZ9grt7VMMA
+          - Em70hoXbIqcTvqscjDFu
+          - fUAo2UQO8tTGZFhd5fPB
+          - GfgMcorzIljrChpL824z
+          - HI7FUfl5phSpxGSYjes1
+          - MLQIb8KSFdLGSIQeUFaV
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false
@@ -155,7 +187,8 @@ jobs:
         inputs:
           inputFile: data/10-error.smi
         options:
-          modelID: fUAo2UQO8tTGZFhd5fPB
+          modelID:
+          - tRgpmWmuBImTw3gC8NXE
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false
@@ -169,7 +202,8 @@ jobs:
         inputs:
           inputFile: data/candidates-10.sdf
         options:
-          modelID: fUAo2UQO8tTGZFhd5fPB
+          modelID:
+          - Z7OzhVDtxaTyMLscRJ4v
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false
@@ -183,7 +217,9 @@ jobs:
         inputs:
           inputFile: data/candidates-10-error.sdf
         options:
-          modelID: fUAo2UQO8tTGZFhd5fPB
+          modelID:
+          - oZZfU6RQgLnmHgk88hnc
+          - y7ymAVUixvLs6tBmwdjZ
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false

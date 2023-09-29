@@ -36,12 +36,17 @@ models_meta = {
     "llKNcGM5vuGhf6EGkOpA": "PGP model",
 }
 
+# memo to self: model execution times (from a non-scientific superficial test):
+# oZZfU6RQgLnmHgk88hnc - 11s
+# y7ymAVUixvLs6tBmwdjZ -  6s
+# the rest: 0.3 - 1.5s
 
 model_file = "{}.jmodel"
 
 # testing locally vs. running in container
 # model_path = Path(".").joinpath("models").absolute()
 model_path = Path(__file__).parent.joinpath("models").absolute()
+
 
 
 def run(
@@ -68,7 +73,7 @@ def run(
         except FileNotFoundError:
             DmLog.emit_event(f"Model {model_id} not found!")
             continue
-
+        
     reader = rdkit_utils.create_reader(
         input_filename,
         delimiter=delimiter,
@@ -83,7 +88,6 @@ def run(
         output_filename,
         delimiter=delimiter,
     )
-
 
     num_outputs = 0
     count = -1
@@ -104,6 +108,7 @@ def run(
 
         values = []
         calc_prop_names = []
+                    
         for model_id, model in models.items():
             # actual prediction
             model(mol)
@@ -114,9 +119,12 @@ def run(
             # model_type = "classification" if model.probability else "regression"
             # DmLog.emit_event(f'Running "{models_meta[model_id]}" ({model_type})')
 
+
         if count == 1 and write_header:
             headers = rdkit_utils.generate_header_values(extra_field_names, len(props), calc_prop_names)
             writer.write_header(headers)
+
+            
     
         writer.write(
             smiles=smi,
@@ -130,9 +138,9 @@ def run(
     reader.close()
     writer.close()
     os.chmod(output_filename, 0o664)
-
+    
     DmLog.emit_event(num_outputs, "outputs among", count, "molecules")
-    DmLog.emit_cost(count)
+    DmLog.emit_cost(count * len(models.keys()))
 
 
 def get_calc_prop_names(molmod, prefix):
