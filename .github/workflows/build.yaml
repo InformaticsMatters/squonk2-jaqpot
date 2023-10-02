@@ -58,10 +58,12 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
+    # Build the image but export to Docker
+    # so we are able to use it in another step of our workflow
     - name: Build
       uses: docker/build-push-action@v3
       with:
-        platforms: linux/amd64
+        load: true
         tags: ${{ env.REPOSITORY }}:${{ env.GITHUB_REF_SLUG }}
     - name: Test
       run: |
