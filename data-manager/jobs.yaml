@@ -87,57 +87,58 @@ jobs:
           modelID:
             title: Model IDs
             type: array
+            uniqueItems: true
             items:
               title: Model ID
               type: string
               anyOf:
               - type: string
                 enum:
-                  fUAo2UQO8tTGZFhd5fPB
+                - fUAo2UQO8tTGZFhd5fPB
                 title: Aqueous solubility model
               - type: string
                 enum:
-                  HI7FUfl5phSpxGSYjes1
+                - HI7FUfl5phSpxGSYjes1
                 title: CYP2C9 substrate model
               - type: string
                 enum:
-                  dud9GNQZaBZ9grt7VMMA
+                - dud9GNQZaBZ9grt7VMMA
                 title: CYP2D6 inhibition model
               - type: string
                 enum:
-                  tRgpmWmuBImTw3gC8NXE
+                - tRgpmWmuBImTw3gC8NXE
                 title: Lipophilicity model
               - type: string
                 enum:
-                  Z7OzhVDtxaTyMLscRJ4v
+                - Z7OzhVDtxaTyMLscRJ4v
                 title: HIA model
               - type: string
                 enum:
-                  cp4HGKxIxjAsdiM5T6Oj
+                - cp4HGKxIxjAsdiM5T6Oj
                 title: CYP2D6 substrate model
               - type: string
                 enum:
-                  Em70hoXbIqcTvqscjDFu
+                - Em70hoXbIqcTvqscjDFu
                 title: Bioavailability model
               - type: string
                 enum:
-                  GfgMcorzIljrChpL824z
+                - GfgMcorzIljrChpL824z
                 title: Clearance Microsome model
               - type: string
                 enum:
-                  MLQIb8KSFdLGSIQeUFaV
+                - MLQIb8KSFdLGSIQeUFaV
                 title: VDss Lombardo model
               - type: string
                 enum:
-                  6oO0hMJyz4s0Sz62OLo6
+                - 6oO0hMJyz4s0Sz62OLo6
                 title: Clearance Hepatocyte model
               - type: string
                 enum:
-                  y7ymAVUixvLs6tBmwdjZ
+                - y7ymAVUixvLs6tBmwdjZ
                 title: Half Life Obach model
               - type: string
                 enum:
-                  oZZfU6RQgLnmHgk88hnc
+                - oZZfU6RQgLnmHgk88hnc
                 title: Blood Brain Barrier model
           outputFile:
             title: Output file name
