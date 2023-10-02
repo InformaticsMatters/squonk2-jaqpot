@@ -11,7 +11,7 @@ jobs:
     name: Prediction
     description: >-
       Predicts molecular properties using Jaqpot predictive models
-    version: '1.0.0'
+    version: '1.1.0'
     category: predictive models
     keywords:
     - predictive models
