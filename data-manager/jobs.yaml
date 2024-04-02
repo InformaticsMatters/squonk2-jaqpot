@@ -94,51 +94,51 @@ jobs:
               anyOf:
               - type: string
                 enum:
-                - fUAo2UQO8tTGZFhd5fPB
+                - solubility
                 title: Aqueous solubility model
               - type: string
                 enum:
-                - HI7FUfl5phSpxGSYjes1
+                - CYP2C9_Substrate_CarbonMangels
                 title: CYP2C9 substrate model
               - type: string
                 enum:
-                - dud9GNQZaBZ9grt7VMMA
+                - CYP2D6_Veith
                 title: CYP2D6 inhibition model
               - type: string
                 enum:
-                - tRgpmWmuBImTw3gC8NXE
+                - lipophilicity
                 title: Lipophilicity model
               - type: string
                 enum:
-                - Z7OzhVDtxaTyMLscRJ4v
+                - hia_hou
                 title: HIA model
               - type: string
                 enum:
-                - cp4HGKxIxjAsdiM5T6Oj
+                - CYP2D6_Substrate_CarbonMangels
                 title: CYP2D6 substrate model
               - type: string
                 enum:
-                - Em70hoXbIqcTvqscjDFu
+                - bioavailability_ma
                 title: Bioavailability model
               - type: string
                 enum:
-                - GfgMcorzIljrChpL824z
+                - clearance_microsome_az
                 title: Clearance Microsome model
               - type: string
                 enum:
-                - MLQIb8KSFdLGSIQeUFaV
+                - vdss_lombardo
                 title: VDss Lombardo model
               - type: string
                 enum:
-                - 6oO0hMJyz4s0Sz62OLo6
+                - clearance_hepatocyte_az
                 title: Clearance Hepatocyte model
               - type: string
                 enum:
-                - y7ymAVUixvLs6tBmwdjZ
+                - half_life+obach
                 title: Half Life Obach model
               - type: string
                 enum:
-                - oZZfU6RQgLnmHgk88hnc
+                - BBB
                 title: Blood Brain Barrier model
           outputFile:
             title: Output file name
