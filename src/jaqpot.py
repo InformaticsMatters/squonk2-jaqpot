@@ -16,58 +16,6 @@ from urllib.parse import urljoin
 import rdkit_utils
 
 
-# models_meta = {
-#     "fUAo2UQO8tTGZFhd5fPB": "Aqueous solubility model",
-#     "AdIueWr1VDrWC3j90jjX": "hERG model",
-#     "88NHffXLTX3aBM2vkmOf": "AMES model",
-#     "7JnhJUBH1wxwB7Vgf8YI": "CYP2C9 inhibition model",
-#     "4UfyxtoMWFuhN2PBrK42": "CYP3A4 inhibition model",
-#     "HI7FUfl5phSpxGSYjes1": "CYP2C9 substrate model",
-#     "dud9GNQZaBZ9grt7VMMA": "CYP2D6 inhibition model",
-#     "tRgpmWmuBImTw3gC8NXE": "Lipophilicity model",
-#     "FR60WJT6qZoTE1L7tNzx": "PPBR model",
-#     "Z7OzhVDtxaTyMLscRJ4v": "HIA model",
-#     "cp4HGKxIxjAsdiM5T6Oj": "CYP2D6 substrate model",
-#     "Em70hoXbIqcTvqscjDFu": "Bioavailability model",
-#     "GfgMcorzIljrChpL824z": "Clearance Microsome model",
-#     "gpA3uw3FM8TWbAZF2BWP": "LD50 model",
-#     "Mc8Uc3J1tvEnkkqlsiAE": "CYP3A4 Substrate CarbonMangels  model",
-#     "2YSbIaKrHFTf1MnyswIk": "CaCO2 Wang model",
-#     "nL7dOTzvaoGRmp1wiv8m": "DILI model",
-#     "MLQIb8KSFdLGSIQeUFaV": "VDss Lombardo model",
-#     "6oO0hMJyz4s0Sz62OLo6": "Clearance Hepatocyte model",
-#     "y7ymAVUixvLs6tBmwdjZ": "Half Life Obach model",
-#     "oZZfU6RQgLnmHgk88hnc": "Blood Brain Barrier model",
-#     "llKNcGM5vuGhf6EGkOpA": "PGP model",
-# }
-
-
-# model_map = {
-#     "fUAo2UQO8tTGZFhd5fPB": "solubility.jmodel",
-#     "AdIueWr1VDrWC3j90jjX": "herg.jmodel",
-#     "88NHffXLTX3aBM2vkmOf": "AMES.jmodel",
-#     "7JnhJUBH1wxwB7Vgf8YI": "CYP2C9_Veith.jmodel",
-#     "4UfyxtoMWFuhN2PBrK42": "CYP3A4_Veith.jmodel",
-#     "HI7FUfl5phSpxGSYjes1": "CYP2C9_Substrate_CarbonMangels.jmodel",
-#     "dud9GNQZaBZ9grt7VMMA": "CYP2D6_Veith.jmodel",
-#     "tRgpmWmuBImTw3gC8NXE": "lipophilicity.jmodel",
-#     "FR60WJT6qZoTE1L7tNzx": "ppbr_az.jmodel",
-#     "Z7OzhVDtxaTyMLscRJ4v": "hia_hou.jmodel",
-#     "cp4HGKxIxjAsdiM5T6Oj": "CYP2D6_Substrate_CarbonMangels.jmodel",
-#     "Em70hoXbIqcTvqscjDFu": "bioavailability_ma.jmodel",
-#     "GfgMcorzIljrChpL824z": "clearance_microsome_az.jmodel",
-#     "gpA3uw3FM8TWbAZF2BWP": "ld50_zhu.jmodel",
-#     "Mc8Uc3J1tvEnkkqlsiAE": "CYP3A4_Substrate_CarbonMangels.jmodel",
-#     "2YSbIaKrHFTf1MnyswIk": "caco2_wang.jmodel",
-#     "nL7dOTzvaoGRmp1wiv8m": "dili.jmodel",
-#     "MLQIb8KSFdLGSIQeUFaV": "vdss_lombardo.jmodel",
-#     "6oO0hMJyz4s0Sz62OLo6": "clearance_hepatocyte_az.jmodel",
-#     "y7ymAVUixvLs6tBmwdjZ": "half_life+obach.jmodel",
-#     "oZZfU6RQgLnmHgk88hnc": "BBB.jmodel",
-#     "llKNcGM5vuGhf6EGkOpA": "pgp.jmodel",    
-
-# }
-
 models_meta = {
     "solubility": "Aqueous solubility model",
     "herg": "hERG model",
@@ -94,23 +42,6 @@ models_meta = {
  }
 
 
-# memo to self: model execution times (from a non-scientific superficial test):
-# oZZfU6RQgLnmHgk88hnc - 11s
-# y7ymAVUixvLs6tBmwdjZ -  6s
-# the rest: 0.3 - 1.5s
-
-# model_file = "{}.jmodel"
-
-# testing locally vs. running in container
-# model_path = Path(".").joinpath("models").absolute()
-# model_path = Path(__file__).parent.joinpath("models").absolute()
-
-# try:
-#     base_model_url = os.environ['BASE_MODEL_URL']
-# except KeyError:
-#     DmLog.emit_event(f"Base model url not set!")
-
-
 
 
 def run(
@@ -132,7 +63,8 @@ def run(
             model_base_path = os.environ['BASE_MODEL_URL']
         except KeyError:
             DmLog.emit_event(f"Base model url not set!")
-            return
+            # assume testing regime and use the default directory
+            model_base_path = "/models"
 
     # TODO: when there's more models, reading them in advance may put
     # too much pressure on memory. it's not too bad now, but may need

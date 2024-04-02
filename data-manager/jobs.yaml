@@ -98,6 +98,22 @@ jobs:
                 title: Aqueous solubility model
               - type: string
                 enum:
+                - herg
+                title: hERG model
+              - type: string
+                enum:
+                - AMES
+                title: AMES model
+              - type: string
+                enum:
+                - CYP2C9_Veith
+                title: CYP2C9 inhibition model
+              - type: string
+                enum:
+                - CYP3A4_Veith
+                title: CYP3A4 inhibition model
+              - type: string
+                enum:
                 - CYP2C9_Substrate_CarbonMangels
                 title: CYP2C9 substrate model
               - type: string
@@ -108,6 +124,10 @@ jobs:
                 enum:
                 - lipophilicity
                 title: Lipophilicity model
+              - type: string
+                enum:
+                - ppbr_az
+                title: PPBR model
               - type: string
                 enum:
                 - hia_hou
@@ -126,6 +146,22 @@ jobs:
                 title: Clearance Microsome model
               - type: string
                 enum:
+                - ld50_zhu
+                title: LD50 model
+              - type: string
+                enum:
+                - CYP3A4_Substrate_CarbonMangels
+                title: CYP3A4 Substrate CarbonMangels model
+              - type: string
+                enum:
+                - caco2_wang
+                title: CaCO2 Wang model
+              - type: string
+                enum:
+                - dili
+                title: DILI model
+              - type: string
+                enum:
                 - vdss_lombardo
                 title: VDss Lombardo model
               - type: string
@@ -140,6 +176,10 @@ jobs:
                 enum:
                 - BBB
                 title: Blood Brain Barrier model
+              - type: string
+                enum:
+                - pgp
+                title: PGP model
           outputFile:
             title: Output file name
             type: string
