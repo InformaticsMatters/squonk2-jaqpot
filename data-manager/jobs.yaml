@@ -11,27 +11,37 @@ jobs:
     name: Prediction
     description: >-
       Predicts molecular properties using Jaqpot predictive models
-    version: '1.1.0'
+    version: '1.2.0'
     category: predictive models
     keywords:
     - predictive models
     - jaqpot
     - aqueous solubility
+    - herg
+    - ames
+    - cyp2c9 inhibition
+    - cyp3a4 inhibition
     - cyp2c9 substrate
     - cyp2d6 inhibition
     - lipophilicity
+    - ppbr
     - hia
     - cyp2d6 substrate
     - bioavailability
     - clearance microsome
+    - ld50
+    - cyp3a4 substrate carbonmangels
+    - caco2 wang
+    - dili
     - vdss lombardo
     - clearance hepatocyte
     - half life obach
     - blood brain barrier
     - bbb
+    - pgp
     image:
       name: informaticsmatters/squonk2-jaqpot
-      tag: '1.0.4'
+      tag: 'latest'
       project-directory: /data
       working-directory: /data
     command: >-
@@ -210,14 +220,10 @@ jobs:
           inputFile: data/10.smi
         options:
           modelID:
-          - 6oO0hMJyz4s0Sz62OLo6
-          - cp4HGKxIxjAsdiM5T6Oj
-          - dud9GNQZaBZ9grt7VMMA
-          - Em70hoXbIqcTvqscjDFu
-          - fUAo2UQO8tTGZFhd5fPB
-          - GfgMcorzIljrChpL824z
-          - HI7FUfl5phSpxGSYjes1
-          - MLQIb8KSFdLGSIQeUFaV
+          - AMES
+          - bioavailability_ma
+          - ld50_zhu
+          - pgp
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false
@@ -232,7 +238,10 @@ jobs:
           inputFile: data/10-error.smi
         options:
           modelID:
-          - tRgpmWmuBImTw3gC8NXE
+          - solubility
+          - lipophilicity
+          - hia_hou
+          - herg
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false
@@ -247,7 +256,10 @@ jobs:
           inputFile: data/candidates-10.sdf
         options:
           modelID:
-          - Z7OzhVDtxaTyMLscRJ4v
+          - CYP2C9_Veith
+          - ppbr_az
+          - dili
+          - vdss_lombardo
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false
@@ -262,8 +274,10 @@ jobs:
           inputFile: data/candidates-10-error.sdf
         options:
           modelID:
-          - oZZfU6RQgLnmHgk88hnc
-          - y7ymAVUixvLs6tBmwdjZ
+          - caco2_wang
+          - half_life+obach
+          - clearance_hepatocyte_az
+          - BBB
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false
