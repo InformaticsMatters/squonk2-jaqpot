@@ -19,6 +19,9 @@ src/model_comp.py
 test.sdf
 docker-compose.yaml
 
+# models
+models
+
 # emacs temp files
 *~
 \#*#
