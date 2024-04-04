@@ -8,8 +8,6 @@ COPY requirements.txt /tmp/
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir --requirement /tmp/requirements.txt
 
-WORKDIR /models
-COPY models/ /models/
 
 WORKDIR ${HOME}
 COPY src/ ./
