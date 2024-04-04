@@ -57,6 +57,8 @@ def run(
     model_base_path: str = "",
 ):
 
+    # temporary measure
+    model_base_path = "https://im-jaqpot-models.s3.eu-central-1.amazonaws.com"
     # if not given, try to extract from env variable
     if not model_base_path:
         try:
