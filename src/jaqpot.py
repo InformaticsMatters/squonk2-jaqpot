@@ -73,21 +73,20 @@ def run(
     # to be evaluated later
     models = {}
     for model_id in set(model_ids):
-        model_path = f"{model_base_path}{model_id}.jmodel"
-        if urlparse(model_path).netloc:
-            print('using url', model_base_path)
+        if urlparse(model_base_path).netloc:
             try:
                 model_file = urlretrieve(urljoin(model_base_path, f"{model_id}.jmodel"))[0]
+                DmLog.emit_event(f"Model {model_id} downloaded to {model_file}")
             except HTTPError:
                 DmLog.emit_event(f"Model {model_id} not available!")
                 continue
         else:
-            print('using path', model_base_path)
             model_file = Path(model_base_path).joinpath(f"{model_id}.jmodel")
 
 
         try:
             models[model_id] = MolecularModel().load(model_file)
+            DmLog.emit_event(f"Model {model_id} loaded from {model_file}")
         except FileNotFoundError:
             DmLog.emit_event(f"Model {model_id} not found!")
             continue
