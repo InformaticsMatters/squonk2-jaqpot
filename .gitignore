@@ -15,7 +15,12 @@ model_download_status.ods
 result.csv
 result.sdf
 src/model_loader.py
+src/model_comp.py
 test.sdf
+docker-compose.yaml
+
+# models
+models
 
 # emacs temp files
 *~
