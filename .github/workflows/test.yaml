@@ -22,8 +22,4 @@ jobs:
         pip install -r build-requirements.txt
     - name: Jote
       run: |
-        jote --manifest manifest-fragnet-search.yaml --dry-run --allow-no-tests
-        jote --manifest manifest-im-virtual-screening.yaml --dry-run
-        jote --manifest manifest-silicos-it.yaml --dry-run --allow-no-tests
-        jote --manifest manifest-dmpk.yaml --dry-run
-        jote --manifest manifest-im-mordred.yaml --dry-run
+        jote --manifest jobs.yaml --dry-run --allow-no-tests
