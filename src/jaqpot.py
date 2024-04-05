@@ -72,12 +72,9 @@ def run(
     # too much pressure on memory. it's not too bad now, but may need
     # to be evaluated later
     models = {}
-    DmLog.emit_event(f"base_model_path: {model_base_path}")
     for model_id in set(model_ids):
         if urlparse(model_base_path).netloc:
             try:
-                url = urljoin(model_base_path, f"{model_id}.jmodel")
-                DmLog.emit_event(f"Downloading {url}")
                 model_file = urlretrieve(urljoin(model_base_path, f"{model_id}.jmodel"))[0]
                 DmLog.emit_event(f"Model {model_id} downloaded to {model_file}")
             except HTTPError:

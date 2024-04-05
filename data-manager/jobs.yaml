@@ -194,6 +194,7 @@ jobs:
             title: Output file name
             type: string
             pattern: "^[A-Za-z0-9_/\\.\\-]+$"
+            default: result.sdf
           delimiter:
             title: Delimiter for text formats
             type: string
