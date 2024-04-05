@@ -41,7 +41,7 @@ jobs:
     - pgp
     image:
       name: informaticsmatters/squonk2-jaqpot
-      tag: 'latest'
+      tag: 'stable'
       project-directory: /data
       working-directory: /data
     command: >-
