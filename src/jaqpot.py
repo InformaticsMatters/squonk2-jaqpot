@@ -72,6 +72,7 @@ def run(
     # too much pressure on memory. it's not too bad now, but may need
     # to be evaluated later
     models = {}
+    DmLog.emit_event(f"base_model_path: {model_base_path}")
     for model_id in set(model_ids):
         if urlparse(model_base_path).netloc:
             try:
@@ -83,6 +84,7 @@ def run(
                 DmLog.emit_event(f"Model {model_id} not available!")
                 continue
         else:
+            DmLog.emit_event(f"Assuming path: {model_base_path}")
             model_file = Path(model_base_path).joinpath(f"{model_id}.jmodel")
 
 
