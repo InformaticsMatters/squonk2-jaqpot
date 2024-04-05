@@ -75,6 +75,8 @@ def run(
     for model_id in set(model_ids):
         if urlparse(model_base_path).netloc:
             try:
+                url = urljoin(model_base_path, f"{model_id}.jmodel")
+                DmLog.emit_event(f"Downloading {url}")
                 model_file = urlretrieve(urljoin(model_base_path, f"{model_id}.jmodel"))[0]
                 DmLog.emit_event(f"Model {model_id} downloaded to {model_file}")
             except HTTPError:
