@@ -19,6 +19,6 @@ jobs:
     uses: ./.github/workflows/build-image-with-push-option.yaml
     secrets: inherit
     with:
-      image-name: vs-jaqpot
+      image-name: squonk2-jaqpot
       image-tag: ${{ inputs.image-tag }}
       image-push: ${{ inputs.image-push }}
