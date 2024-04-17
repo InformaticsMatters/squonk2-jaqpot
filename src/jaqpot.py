@@ -108,7 +108,9 @@ def run(
     logging.info('models resolved')
     with open(input_filename, 'r') as inp_test:
         for i, line in enumerate(inp_test):
-            logging.debug('line %s: %s', i, line)
+            logging.info('line %s: %s', i, line)
+            if i > 9:
+                break
     
     reader = rdkit_utils.create_reader(
         input_filename,
