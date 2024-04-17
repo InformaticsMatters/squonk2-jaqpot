@@ -2,6 +2,7 @@
 
 import argparse
 import os
+import logging
 
 from pathlib import Path
 
@@ -15,6 +16,7 @@ from urllib.parse import urljoin
 
 import rdkit_utils
 
+logging.basicConfig(level=logging.INFO)
 
 models_meta = {
     "solubility": "Aqueous solubility model",
@@ -57,38 +59,57 @@ def run(
     model_base_path: str = "",
 ):
 
-    # temporary measure
+    logging.info('read_header: %s', read_header)
+    logging.info('write_header: %s', write_header)
+    logging.info('delimiter: %s', delimiter)
+    logging.info('id_column: %s', id_column)
+
     model_base_path = "https://im-jaqpot-models.s3.eu-central-1.amazonaws.com"
     # if not given, try to extract from env variable
     if not model_base_path:
+        logging.info('trying base path from env')
         try:
             model_base_path = os.environ['BASE_MODEL_URL']
         except KeyError:
+            logging.warning('Base model url not set!')
             DmLog.emit_event(f"Base model url not set!")
             # assume testing regime and use the default directory
             model_base_path = "/models"
 
+    logging.info('model_base_path: %s', model_base_path)
     # TODO: when there's more models, reading them in advance may put
     # too much pressure on memory. it's not too bad now, but may need
     # to be evaluated later
     models = {}
     for model_id in set(model_ids):
+        logging.info('resolving model: %s', model_id)
         if urlparse(model_base_path).netloc:
+            logging.info('web address')
             try:
+                logging.info('fetching model %s', urljoin(model_base_path, f"{model_id}.jmodel"))
                 model_file = urlretrieve(urljoin(model_base_path, f"{model_id}.jmodel"))[0]
             except HTTPError:
+                logging.info('model %s not available at url', model_id)
                 DmLog.emit_event(f"Model {model_id} not available!")
                 continue
         else:
+            logging.info('local path: %s', Path(model_base_path).joinpath(f"{model_id}.jmodel"))
             model_file = Path(model_base_path).joinpath(f"{model_id}.jmodel")
 
 
         try:
+            logging.info('loading model file: %s', model_file)
             models[model_id] = MolecularModel().load(model_file)
         except FileNotFoundError:
+            logging.info('model not found')
             DmLog.emit_event(f"Model {model_id} not found!")
             continue
-        
+
+    logging.info('models resolved')
+    with open(input_filename, 'r') as inp_test:
+        for i, line in enumerate(inp_test):
+            logging.debug('line %s: %s', i, line)
+    
     reader = rdkit_utils.create_reader(
         input_filename,
         delimiter=delimiter,
@@ -97,19 +118,30 @@ def run(
         sdf_read_records=sdf_read_records,
     )
 
+    logging.info('reader created')
+    
     extra_field_names = reader.get_extra_field_names()
+
+    logging.info('extra field names: %s', extra_field_names)
     
     writer = rdkit_utils.create_writer(
         output_filename,
         delimiter=delimiter,
     )
-
+    
+    logging.info('writer created')
+    
     num_outputs = 0
     count = -1
     while True:
         count += 1
+        logging.info('loop starts: %s', count)
         try:
             mol, smi, mol_id, props = reader.read()
+            logging.info('mol: %s', mol)
+            logging.info('smi: %s', smi)
+            logging.info('mol_id: %s', mol_id)
+            logging.info('props: %s', props)
         except TypeError as ex:
             DmLog.emit_event(f"{ex}")
             continue
@@ -136,11 +168,15 @@ def run(
 
 
         if count == 1 and write_header:
+            logging.info('writing header')
             headers = rdkit_utils.generate_header_values(extra_field_names, len(props), calc_prop_names)
+            logging.info('headers: %s', headers)
+
             writer.write_header(headers)
 
             
-    
+        logging.info('writing the rest')
+        
         writer.write(
             smiles=smi,
             mol=mol,
@@ -149,6 +185,8 @@ def run(
             prop_names=calc_prop_names,  # only used in SdfWriter
             new_props=values,
         )
+
+        logging.info('mol written, num_outputs: %s', num_outputs)
 
     reader.close()
     writer.close()
