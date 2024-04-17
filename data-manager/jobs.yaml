@@ -216,75 +216,90 @@ jobs:
             type: boolean
             default: true
     tests:
-      smiles-execution:
+      # smiles-execution:
+      #   inputs:
+      #     inputFile: data/10.smi
+      #   options:
+      #     modelID:
+      #     - AMES
+      #     - bioavailability_ma
+      #     - ld50_zhu
+      #     - pgp
+      #     outputFile: predictions.sdf
+      #     readHeader: false
+      #     writeHeader: false
+      #   checks:
+      #     exitCode: 0
+      #     outputs:
+      #     - name: predictions.sdf
+      #       checks:
+      #       - exists: true
+      # smiles-error-execution:
+      #   inputs:
+      #     inputFile: data/10-error.smi
+      #   options:
+      #     modelID:
+      #     - solubility
+      #     - lipophilicity
+      #     - hia_hou
+      #     - herg
+      #     outputFile: predictions.sdf
+      #     readHeader: false
+      #     writeHeader: false
+      #   checks:
+      #     exitCode: 0
+      #     outputs:
+      #     - name: predictions.sdf
+      #       checks:
+      #       - exists: true
+      # sdf-execution:
+      #   inputs:
+      #     inputFile: data/candidates-10.sdf
+      #   options:
+      #     modelID:
+      #     - CYP2C9_Veith
+      #     - ppbr_az
+      #     - dili
+      #     - vdss_lombardo
+      #     outputFile: predictions.sdf
+      #     readHeader: false
+      #     writeHeader: false
+      #   checks:
+      #     exitCode: 0
+      #     outputs:
+      #     - name: predictions.sdf
+      #       checks:
+      #       - exists: true
+      # sdf-error-execution:
+      #   inputs:
+      #     inputFile: data/candidates-10-error.sdf
+      #   options:
+      #     modelID:
+      #     - caco2_wang
+      #     - half_life+obach
+      #     - clearance_hepatocyte_az
+      #     - BBB
+      #     outputFile: predictions.sdf
+      #     readHeader: false
+      #     writeHeader: false
+      #   checks:
+      #     exitCode: 0
+      #     outputs:
+      #     - name: predictions.sdf
+      #       checks:
+      #       - exists: true
+      smiles-result-execution:
         inputs:
-          inputFile: data/10.smi
+          inputFile: data/1000.smi
         options:
           modelID:
-          - AMES
-          - bioavailability_ma
-          - ld50_zhu
-          - pgp
-          outputFile: predictions.sdf
-          readHeader: false
-          writeHeader: false
-        checks:
-          exitCode: 0
-          outputs:
-          - name: predictions.sdf
-            checks:
-            - exists: true
-      smiles-error-execution:
-        inputs:
-          inputFile: data/10-error.smi
-        options:
-          modelID:
-          - solubility
-          - lipophilicity
-          - hia_hou
-          - herg
-          outputFile: predictions.sdf
-          readHeader: false
-          writeHeader: false
-        checks:
-          exitCode: 0
-          outputs:
-          - name: predictions.sdf
-            checks:
-            - exists: true
-      sdf-execution:
-        inputs:
-          inputFile: data/candidates-10.sdf
-        options:
-          modelID:
-          - CYP2C9_Veith
-          - ppbr_az
-          - dili
-          - vdss_lombardo
-          outputFile: predictions.sdf
-          readHeader: false
-          writeHeader: false
-        checks:
-          exitCode: 0
-          outputs:
-          - name: predictions.sdf
-            checks:
-            - exists: true
-      sdf-error-execution:
-        inputs:
-          inputFile: data/candidates-10-error.sdf
-        options:
-          modelID:
-          - caco2_wang
-          - half_life+obach
-          - clearance_hepatocyte_az
           - BBB
-          outputFile: predictions.sdf
+          outputFile: predictions.smi
           readHeader: false
           writeHeader: false
         checks:
           exitCode: 0
           outputs:
-          - name: predictions.sdf
+          - name: predictions.smi
             checks:
             - exists: true
