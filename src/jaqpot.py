@@ -68,7 +68,7 @@ def run(
     # special processing of delimiter to allow it to be set as a name
     delimiter = read_delimiter(delimiter)
 
-    # model_base_path = "https://im-jaqpot-models.s3.eu-central-1.amazonaws.com"
+    model_base_path = "https://im-jaqpot-models.s3.eu-central-1.amazonaws.com"
     # if not given, try to extract from env variable
     if not model_base_path:
         logging.info('trying base path from env')
