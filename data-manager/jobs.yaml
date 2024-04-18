@@ -20,7 +20,7 @@ jobs:
     - herg
     - ames
     - cyp2c9 inhibition
-    - cyp3a4 inhibition
+    # - cyp3a4 inhibition
     - cyp2c9 substrate
     - cyp2d6 inhibition
     - lipophilicity
@@ -118,10 +118,10 @@ jobs:
                 enum:
                 - CYP2C9_Veith
                 title: CYP2C9 inhibition model
-              - type: string
-                enum:
-                - CYP3A4_Veith
-                title: CYP3A4 inhibition model
+              # - type: string
+              #   enum:
+              #   - CYP3A4_Veith
+              #   title: CYP3A4 inhibition model
               - type: string
                 enum:
                 - CYP2C9_Substrate_CarbonMangels
@@ -180,7 +180,7 @@ jobs:
                 title: Clearance Hepatocyte model
               - type: string
                 enum:
-                - half_life+obach
+                - half_life_obach
                 title: Half Life Obach model
               - type: string
                 enum:
@@ -243,6 +243,7 @@ jobs:
           - lipophilicity
           - hia_hou
           - herg
+          # - CYP3A4_Veith
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false
@@ -276,7 +277,7 @@ jobs:
         options:
           modelID:
           - caco2_wang
-          - half_life+obach
+          - half_life_obach
           - clearance_hepatocyte_az
           - BBB
           outputFile: predictions.sdf
