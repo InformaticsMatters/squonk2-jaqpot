@@ -39,7 +39,7 @@ models_meta = {
     "dili": "DILI model",
     "vdss_lombardo": "VDss Lombardo model",
     "clearance_hepatocyte_az": "Clearance Hepatocyte model",
-    "half_life+obach": "Half Life Obach model",
+    "half_life_obach": "Half Life Obach model",
     "BBB": "Blood Brain Barrier model",
     "pgp": "PGP model",
  }

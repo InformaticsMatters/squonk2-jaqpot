@@ -180,7 +180,7 @@ jobs:
                 title: Clearance Hepatocyte model
               - type: string
                 enum:
-                - half_life+obach
+                - half_life_obach
                 title: Half Life Obach model
               - type: string
                 enum:
@@ -276,7 +276,7 @@ jobs:
         options:
           modelID:
           - caco2_wang
-          - half_life+obach
+          - half_life_obach
           - clearance_hepatocyte_az
           - BBB
           outputFile: predictions.sdf
