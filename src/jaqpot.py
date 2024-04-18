@@ -24,7 +24,7 @@ models_meta = {
     "herg": "hERG model",
     "AMES": "AMES model",
     "CYP2C9_Veith": "CYP2C9 inhibition model",
-    "CYP3A4_Veith": "CYP3A4 inhibition model",
+    # "CYP3A4_Veith": "CYP3A4 inhibition model",
     "CYP2C9_Substrate_CarbonMangels": "CYP2C9 substrate model",
     "CYP2D6_Veith": "CYP2D6 inhibition model",
     "lipophilicity": "Lipophilicity model",
@@ -68,7 +68,7 @@ def run(
     # special processing of delimiter to allow it to be set as a name
     delimiter = read_delimiter(delimiter)
 
-    model_base_path = "https://im-jaqpot-models.s3.eu-central-1.amazonaws.com"
+    # model_base_path = "https://im-jaqpot-models.s3.eu-central-1.amazonaws.com"
     # if not given, try to extract from env variable
     if not model_base_path:
         logging.info('trying base path from env')

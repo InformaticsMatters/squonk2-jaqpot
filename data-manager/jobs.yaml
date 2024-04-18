@@ -20,7 +20,7 @@ jobs:
     - herg
     - ames
     - cyp2c9 inhibition
-    - cyp3a4 inhibition
+    # - cyp3a4 inhibition
     - cyp2c9 substrate
     - cyp2d6 inhibition
     - lipophilicity
@@ -44,6 +44,7 @@ jobs:
       tag: 'latest'
       project-directory: /data
       working-directory: /data
+      memory: 16Gi
     command: >-
       /code/jaqpot.py
       {% for id in  modelID %}{{ id }} {% endfor %}
@@ -118,10 +119,10 @@ jobs:
                 enum:
                 - CYP2C9_Veith
                 title: CYP2C9 inhibition model
-              - type: string
-                enum:
-                - CYP3A4_Veith
-                title: CYP3A4 inhibition model
+              # - type: string
+              #   enum:
+              #   - CYP3A4_Veith
+              #   title: CYP3A4 inhibition model
               - type: string
                 enum:
                 - CYP2C9_Substrate_CarbonMangels
@@ -243,6 +244,7 @@ jobs:
           - lipophilicity
           - hia_hou
           - herg
+          # - CYP3A4_Veith
           outputFile: predictions.sdf
           readHeader: false
           writeHeader: false
