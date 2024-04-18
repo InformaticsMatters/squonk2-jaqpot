@@ -155,6 +155,9 @@ def run(
             # end of file
             break
 
+        # get the biggest fragment, eliminate salts, etc
+        mol = rdkit_utils.fragment(mol, 'hac')
+
         num_outputs += 1
         if (count + 1) % reporting_interval == 0:
             DmLog.emit_event(f'{count + 1} molecules processed')
