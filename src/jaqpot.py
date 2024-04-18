@@ -15,6 +15,7 @@ from urllib.parse import urlparse
 from urllib.parse import urljoin
 
 import rdkit_utils
+from utils import read_delimiter
 
 logging.basicConfig(level=logging.INFO)
 
@@ -63,6 +64,9 @@ def run(
     logging.info('write_header: %s', write_header)
     logging.info('delimiter: %s', delimiter)
     logging.info('id_column: %s', id_column)
+
+    # special processing of delimiter to allow it to be set as a name
+    delimiter = read_delimiter(delimiter)
 
     model_base_path = "https://im-jaqpot-models.s3.eu-central-1.amazonaws.com"
     # if not given, try to extract from env variable
