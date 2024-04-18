@@ -160,6 +160,7 @@ def run(
                     
         for model_id, model in models.items():
             # actual prediction
+            logging.info('predicting with: %s', model_id)
             model(mol)
             values.extend(get_calc_values(model))
             calc_prop_names.extend(get_calc_prop_names(model, format_name(models_meta[model_id])))
