@@ -31,7 +31,7 @@ class SdfWriter:
         if not mol:
             mol = Chem.MolFromSmiles(smiles)
         if mol_id is not None:
-            mol.SetProp('_Name', id)
+            mol.SetProp('_Name', mol_id)
         if smiles_prop_name is not None:
             mol.SetProp(smiles_prop_name, smiles)
         if not prop_names:
