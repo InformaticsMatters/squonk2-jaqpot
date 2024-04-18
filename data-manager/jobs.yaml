@@ -44,7 +44,6 @@ jobs:
       tag: 'latest'
       project-directory: /data
       working-directory: /data
-      memory: 16Gi
     command: >-
       /code/jaqpot.py
       {% for id in  modelID %}{{ id }} {% endfor %}
