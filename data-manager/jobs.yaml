@@ -288,4 +288,3 @@ jobs:
           - name: predictions.sdf
             checks:
             - exists: true
-
