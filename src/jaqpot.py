@@ -104,6 +104,7 @@ def run(
         try:
             logging.info('loading model file: %s', model_file)
             models[model_id] = MolecularModel().load(model_file)
+            DmLog.emit_event(f"{models_meta[model_id]} loaded")
         except FileNotFoundError:
             logging.info('model not found')
             DmLog.emit_event(f"Model {model_id} not found!")
