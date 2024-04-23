@@ -137,6 +137,7 @@ def run(
     )
     
     logging.info('writer created')
+    DmLog.emit_event("Starting predictions")
     
     num_outputs = 0
     count = -1
@@ -201,7 +202,6 @@ def run(
 
     reader.close()
     writer.close()
-    os.chmod(output_filename, 0o664)
     
     DmLog.emit_event(num_outputs, "outputs among", count, "molecules")
     DmLog.emit_cost(count * len(models.keys()))
