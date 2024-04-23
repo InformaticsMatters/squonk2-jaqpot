@@ -56,12 +56,12 @@ jobs:
     variables:
       order:
         options:
-        - modelID
         - outputFile
-        - delimiter
-        - idColumn
+        - modelID
         - readHeader
         - writeHeader
+        - delimiter
+        - idColumn
       inputs:
         type: object
         required:
@@ -194,7 +194,7 @@ jobs:
             title: Output file name
             type: string
             pattern: "^[A-Za-z0-9_/\\.\\-]+$"
-            default: result.sdf
+            default: jaqpot_prediction.sdf
           delimiter:
             title: Delimiter for text formats
             type: string
