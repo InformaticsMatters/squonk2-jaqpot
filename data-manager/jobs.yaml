@@ -97,7 +97,6 @@ jobs:
           modelID:
             title: Model IDs
             type: array
-            uniqueItems: true
             items:
               title: Model ID
               type: string
