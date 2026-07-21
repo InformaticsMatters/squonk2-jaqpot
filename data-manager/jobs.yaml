@@ -44,6 +44,7 @@ jobs:
       tag: 'stable'
       project-directory: /data
       working-directory: /data
+      fix-permissions: true
     command: >-
       /code/jaqpot.py
       {% for id in  modelID %}{{ id }} {% endfor %}
