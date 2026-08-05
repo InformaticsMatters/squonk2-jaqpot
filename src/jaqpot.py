@@ -122,21 +122,19 @@ def run(
         delimiter=delimiter,
         read_header=read_header,
         id_column=id_column,
-        sdf_read_records=sdf_read_records,
+        read_records=sdf_read_records,
     )
 
     logging.info('reader created')
-    
+
     extra_field_names = reader.get_extra_field_names()
 
     logging.info('extra field names: %s', extra_field_names)
-    
-    writer = rdkit_utils.create_writer(
-        output_filename,
-        delimiter=delimiter,
-    )
-    
-    logging.info('writer created')
+
+    # The writer can't be created until the calculated property names are
+    # known (needed up-front for SDF output), so it's created lazily once
+    # the first molecule's predictions have been computed.
+    writer = None
     DmLog.emit_event("Starting predictions")
     
     num_outputs = 0
@@ -144,18 +142,19 @@ def run(
     while True:
         count += 1
         logging.info('loop starts: %s', count)
-        try:
-            mol, smi, mol_id, props = reader.read()
-            logging.info('mol: %s', mol)
-            logging.info('smi: %s', smi)
-            logging.info('mol_id: %s', mol_id)
-            logging.info('props: %s', props)
-        except TypeError as ex:
-            DmLog.emit_event(f"{ex}")
-            continue
-        except StopIteration as ex:
+        t = reader.read()
+        if not t:
             # end of file
             break
+        mol, smi, mol_id, props = t
+        logging.info('mol: %s', mol)
+        logging.info('smi: %s', smi)
+        logging.info('mol_id: %s', mol_id)
+        logging.info('props: %s', props)
+
+        if not mol:
+            DmLog.emit_event(f"Failed to read molecule {count}")
+            continue
 
         # get the biggest fragment, eliminate salts, etc
         mol = rdkit_utils.fragment(mol, 'hac')
@@ -179,32 +178,69 @@ def run(
             # DmLog.emit_event(f'Running "{models_meta[model_id]}" ({model_type})')
 
 
+        if writer is None:
+            writer = rdkit_utils.create_writer(
+                output_filename,
+                delimiter=delimiter,
+                extra_field_names=extra_field_names,
+                calc_prop_names=calc_prop_names,
+            )
+            logging.info('writer created')
+
         if count == 1 and write_header:
             logging.info('writing header')
-            headers = rdkit_utils.generate_header_values(extra_field_names, len(props), calc_prop_names)
+            headers = generate_header_values(extra_field_names, len(props), calc_prop_names)
             logging.info('headers: %s', headers)
 
             writer.write_header(headers)
 
-            
+
         logging.info('writing the rest')
-        
+
         writer.write(
-            smiles=smi,
+            smi=smi,
             mol=mol,
             mol_id=mol_id,
             existing_props=props,  # only used in SmilesWriter
-            prop_names=calc_prop_names,  # only used in SdfWriter
             new_props=values,
         )
 
         logging.info('mol written, num_outputs: %s', num_outputs)
 
     reader.close()
+    if writer is None:
+        # No molecules were processed (e.g. an empty input); still create
+        # the declared output file so downstream consumers find it.
+        writer = rdkit_utils.create_writer(
+            output_filename,
+            delimiter=delimiter,
+            extra_field_names=extra_field_names,
+        )
     writer.close()
-    
+
     DmLog.emit_event(num_outputs, "outputs among", count, "molecules")
     DmLog.emit_cost(count * len(models.keys()))
+
+
+def generate_header_values(extra_field_names, num_orig_props, calc_prop_names):
+    """Build the output header row: SMILES column, the extra input fields
+    (or numbered placeholders when none were read), then the calculated
+    property names.
+
+    Kept local rather than using rdkit_utils.generate_headers: that function
+    targets desc-rdkit/desc-mordred's id-column semantics (it includes the
+    ID column in the header), which would change this job's existing output
+    format. There's no test coverage here to verify that reconciliation, so
+    the original, narrower behaviour is preserved as-is.
+    """
+    headers = ['smiles']
+    if extra_field_names:
+        headers.extend(extra_field_names)
+    else:
+        for i in range(num_orig_props):
+            headers.append('field' + str(i + 2))
+    headers.extend(calc_prop_names)
+    return headers
 
 
 def get_calc_prop_names(molmod, prefix):
@@ -260,6 +296,20 @@ def format_name(name):
     return name.replace(" ", "_").replace("__", "_")
 
 
+def str_or_int(value: str):
+    """Parse a CLI value as an int when possible, keeping it as a string
+    otherwise (SDF id-column values are field names, not indices).
+
+    Needed so a numeric --id-column (e.g. "0") reaches rdkit_utils as an
+    int: SmilesReader's mol-column auto-detection compares id_column to the
+    int 0, which a raw string would never match.
+    """
+    try:
+        return int(value)
+    except ValueError:
+        return value
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Predict properties with a Jaqpot model")
     parser.add_argument("models", metavar="Model ID", nargs="+", help="List of Jaqpot model IDs")
@@ -268,6 +318,7 @@ if __name__ == "__main__":
     parser.add_argument("-d", "--delimiter", default="\t", help="Delimiter when using SMILES")
     parser.add_argument(
         "--id-column",
+        type=str_or_int,
         help="Column for name field (zero based integer for .smi, text for SDF)",
     )
     parser.add_argument(
