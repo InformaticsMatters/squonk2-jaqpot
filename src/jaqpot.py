@@ -15,7 +15,8 @@ from urllib.parse import urlparse
 from urllib.parse import urljoin
 
 import rdkit_utils
-from utils import read_delimiter
+from dm_job_utilities.utils import read_delimiter
+from rdkit_utils import str_or_int
 
 logging.basicConfig(level=logging.INFO)
 
@@ -294,20 +295,6 @@ def get_calc_values(molmod):
 def format_name(name):
     """Return sd-file friendly name"""
     return name.replace(" ", "_").replace("__", "_")
-
-
-def str_or_int(value: str):
-    """Parse a CLI value as an int when possible, keeping it as a string
-    otherwise (SDF id-column values are field names, not indices).
-
-    Needed so a numeric --id-column (e.g. "0") reaches rdkit_utils as an
-    int: SmilesReader's mol-column auto-detection compares id_column to the
-    int 0, which a raw string would never match.
-    """
-    try:
-        return int(value)
-    except ValueError:
-        return value
 
 
 if __name__ == "__main__":
